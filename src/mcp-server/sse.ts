@@ -26,7 +26,7 @@ export function initSSEServer(server: McpServer, options: McpServerOptions) {
     await transport.handlePostMessage(req, res);
   });
 
-  app.listen(options.port, options.host, (error) => {
+  app.listen(parseInt(options.port || '3000'), options.host || 'localhost', (error) => {
     if (error) {
       console.error('Server error:', error);
       process.exit(1);

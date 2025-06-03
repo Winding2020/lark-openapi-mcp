@@ -54,7 +54,7 @@ describe('initMcpServer', () => {
       appId: 'test-app-id',
       appSecret: 'test-app-secret',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     const { mcpServer, larkClient } = initMcpServer(options);
@@ -75,8 +75,10 @@ describe('initMcpServer', () => {
     process.env.APP_SECRET = 'env-app-secret';
 
     const options = {
+      appId: 'env-app-id',
+      appSecret: 'env-app-secret',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     const { mcpServer, larkClient } = initMcpServer(options);
@@ -97,7 +99,7 @@ describe('initMcpServer', () => {
       appSecret: 'test-app-secret',
       userAccessToken: 'test-user-access-token',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     const { larkClient } = initMcpServer(options);
@@ -111,7 +113,7 @@ describe('initMcpServer', () => {
       appSecret: 'test-app-secret',
       tools: ['tool1', 'tool2'],
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     const { larkClient } = initMcpServer(options);
@@ -133,7 +135,7 @@ describe('initMcpServer', () => {
       appSecret: 'test-app-secret',
       tools: 'tool1,tool2',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     const { larkClient } = initMcpServer(options);
@@ -151,8 +153,10 @@ describe('initMcpServer', () => {
 
   it('如果凭证缺失，应该退出程序', () => {
     const options = {
+      appId: '',
+      appSecret: '',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     // 清除环境变量
@@ -171,7 +175,7 @@ describe('initMcpServer', () => {
       appSecret: 'test-app-secret',
       tools: ['preset.default', 'extra-tool'],
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     // 从模块导入默认工具列表

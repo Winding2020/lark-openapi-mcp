@@ -71,4 +71,6 @@ export interface LarkMcpToolOptions extends LarkClientOptions {
   // 工具选项
   toolsOptions?: ToolsFilterOptions;
   tokenMode?: TokenMode;
+  // OAuth配置
+  oauthRedirectPort?: number;
 }

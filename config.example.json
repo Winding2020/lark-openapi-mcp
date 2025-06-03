@@ -1,0 +1,14 @@
+{
+  "appId": "cli_xxxx",
+  "appSecret": "xxxx",
+  "domain": "https://open.feishu.cn",
+  "tools": ["preset.light"],
+  "toolNameCase": "snake",
+  "language": "zh",
+  "userAccessToken": "",
+  "tokenMode": "auto",
+  "mode": "stdio",
+  "host": "localhost",
+  "port": "3000",
+  "oauthPort": "3000"
+} 

@@ -267,7 +267,7 @@ describe('LarkMcpTool', () => {
       const result = await handlerFunction({ content: 'test' });
 
       expect(result.isError).toBe(true);
-      expect(result.content[0].text).toBe('Invalid UserAccessToken');
+      expect(result.content[0].text).toBe('Error: "Invalid UserAccessToken"');
     });
   });
 

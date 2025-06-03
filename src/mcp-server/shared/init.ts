@@ -6,7 +6,7 @@ import * as larkmcp from '../../mcp-tool';
 import { oapiHttpInstance } from '../../utils/http-instance';
 
 export function initMcpServer(options: McpServerOptions) {
-  const { appId, appSecret, userAccessToken } = options;
+  const { appId, appSecret, userAccessToken, oauthRedirectPort } = options;
 
   if (!appId || !appSecret) {
     console.error(
@@ -39,6 +39,7 @@ export function initMcpServer(options: McpServerOptions) {
       ? { allowTools: allowTools as larkmcp.ToolName[], language: options.language }
       : { language: options.language },
     tokenMode: options.tokenMode,
+    oauthRedirectPort,
   });
 
   if (userAccessToken) {

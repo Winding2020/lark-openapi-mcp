@@ -210,6 +210,7 @@ lark-mcp mcp -a <your_app_id> -s <your_app_secret> -t im.v1.message.create,im.v1
 | `--mode` | `-m` | 传输模式，可选值为stdio或sse，默认为stdio | `-m sse` |
 | `--host` |  | SSE模式下的监听主机，默认为localhost | `--host 0.0.0.0` |
 | `--port` | `-p` | SSE模式下的监听端口，默认为3000 | `-p 3000` |
+| `--oauth-port` |  | OAuth回调服务器端口，默认为3000 | `--oauth-port 8080` |
 | `--config` |  | 配置文件路径，支持JSON格式 | `--config ./config.json` |
 | `--version` | `-V` | 显示版本号 | `-V` |
 | `--help` | `-h` | 显示帮助信息 | `-h` |
@@ -222,11 +223,27 @@ lark-mcp mcp -a <your_app_id> -s <your_app_secret> -t im.v1.message.create,im.v1
    ```
 
 2. **使用用户身份**：
+   
+   **方式一：手动提供用户访问令牌**
    ```bash
    lark-mcp mcp -a cli_xxxx -s yyyyy -u u-zzzz
    ```
 
-    > **说明**：用户访问令牌可以通过[飞书开放平台的授权流程](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/authentication-management/access-token/get-user-access-token)获取，你也可以使用API调试台获取。使用用户访问令牌后，API调用将以该用户的身份进行。
+   **方式二：自动OAuth授权（推荐）**
+   ```bash
+   # 启动时自动获取用户访问令牌
+   lark-mcp mcp -a cli_xxxx -s yyyyy --token-mode user_access_token
+   ```
+   
+   当需要用户身份调用API时，程序会：
+   - 首先检查本地是否有有效的用户访问令牌
+   - 如果没有或已过期，自动打开浏览器进行OAuth授权
+   - 安全地存储令牌到系统钥匙串或本地文件
+   - 自动处理令牌刷新，减少用户重复授权
+
+    > **重要配置**：使用自动OAuth授权前，请确保在[飞书开放平台应用管理后台](https://open.feishu.cn/app)中配置重定向URL：`http://localhost:3000/oauth/callback`（如果使用了`--oauth-port`参数，请相应调整端口号）
+    
+    > **说明**：用户访问令牌也可以通过[飞书开放平台的授权流程](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/authentication-management/access-token/get-user-access-token)手动获取，或使用API调试台获取。使用用户访问令牌后，API调用将以该用户的身份进行。
 
 3. **设置特定的令牌模式**：
    ```bash
@@ -320,6 +337,39 @@ lark-mcp mcp -a <your_app_id> -s <your_app_secret> -t im.v1.message.create,im.v1
 
     > **说明**：命令行参数优先级高于配置文件。当同时使用命令行参数和配置文件时，命令行参数会覆盖配置文件中的对应设置。
 
+#### OAuth授权管理
+
+除了基本的MCP服务外，lark-mcp还提供了用户令牌管理相关的命令：
+
+1. **手动触发OAuth授权**：
+   ```bash
+   lark-mcp auth -a cli_xxxx -s yyyyy
+   ```
+   
+   手动进行OAuth授权流程，获取并存储用户访问令牌。这在以下情况下很有用：
+   - 提前获取用户授权，避免在API调用时中断流程
+   - 测试OAuth配置是否正确
+   - 更新已过期的令牌
+
+2. **清除存储的令牌**：
+   ```bash
+   lark-mcp clear-tokens -a cli_xxxx -s yyyyy
+   ```
+   
+   清除所有本地存储的用户访问令牌，包括系统钥匙串和本地文件中的令牌。适用于：
+   - 切换用户账户
+   - 解决令牌相关的问题
+   - 重置授权状态
+
+3. **自定义OAuth端口**：
+   ```bash
+   # 如果默认端口3000被占用，可以指定其他端口
+   lark-mcp auth -a cli_xxxx -s yyyyy --oauth-port 8080
+   lark-mcp mcp -a cli_xxxx -s yyyyy --oauth-port 8080
+   ```
+   
+   > **注意**：使用自定义端口时，需要同时在飞书开放平台应用后台更新重定向URL为相应的端口。
+
 11. **传输模式**：
 
     lark-mcp支持两种传输模式：
@@ -366,6 +416,27 @@ lark-mcp mcp -a <your_app_id> -s <your_app_secret> -t im.v1.message.create,im.v1
 
 - **问题**: SSE模式下无法连接或接收消息
   **解决方案**: 检查端口是否被占用，尝试更换端口。确保客户端正确连接到SSE端点并处理事件流。
+
+- **问题**: OAuth授权失败或浏览器无法打开
+  **解决方案**: 
+  1. 检查网络连接是否正常
+  2. 确保在飞书开放平台应用后台正确配置了重定向URL：`http://localhost:3000/oauth/callback`
+  3. 如果浏览器无法自动打开，请手动复制控制台显示的授权URL到浏览器中
+  4. 检查端口3000是否被其他程序占用，如有冲突请使用`--oauth-port`参数指定其他端口
+
+- **问题**: 用户访问令牌自动过期或刷新失败
+  **解决方案**: 
+  1. 使用`lark-mcp clear-tokens`清除所有存储的令牌
+  2. 重新运行`lark-mcp auth`进行授权
+  3. 检查应用的权限配置是否正确
+  4. 确保系统时间准确，时间偏差可能导致令牌验证失败
+
+- **问题**: 系统钥匙串访问被拒绝或keytar安装失败
+  **解决方案**: 
+  1. 程序会自动降级到文件存储方式，令牌将保存在`~/.lark-mcp/tokens.json`
+  2. 确保该目录权限正确（仅当前用户可读写）
+  3. keytar是可选依赖，安装失败不影响基本功能
+  4. 在macOS上，首次使用可能需要授权访问钥匙串
 
 ## 相关链接
 

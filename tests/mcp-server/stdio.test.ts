@@ -76,7 +76,7 @@ describe('initStdioServer', () => {
       appId: 'test-app-id',
       appSecret: 'test-app-secret',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     // 首先初始化MCP服务器
@@ -95,7 +95,7 @@ describe('initStdioServer', () => {
       appId: 'test-app-id',
       appSecret: 'test-app-secret',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     // 修改connect的实现以模拟错误

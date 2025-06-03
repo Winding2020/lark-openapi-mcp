@@ -13,10 +13,10 @@ export const OAPI_MCP_DEFAULT_ARGS = {
 };
 
 export const OAPI_MCP_ENV_ARGS = {
-  appId: process.env.APP_ID,
-  appSecret: process.env.APP_SECRET,
-  userAccessToken: process.env.USER_ACCESS_TOKEN,
-  tokenMode: process.env.LARK_TOKEN_MODE,
-  tools: process.env.LARK_TOOLS,
-  domain: process.env.LARK_DOMAIN,
+  ...(process.env.APP_ID && { appId: process.env.APP_ID }),
+  ...(process.env.APP_SECRET && { appSecret: process.env.APP_SECRET }),
+  ...(process.env.USER_ACCESS_TOKEN && { userAccessToken: process.env.USER_ACCESS_TOKEN }),
+  ...(process.env.LARK_TOKEN_MODE && { tokenMode: process.env.LARK_TOKEN_MODE }),
+  ...(process.env.LARK_TOOLS && { tools: process.env.LARK_TOOLS }),
+  ...(process.env.LARK_DOMAIN && { domain: process.env.LARK_DOMAIN }),
 };

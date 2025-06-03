@@ -116,7 +116,7 @@ describe('initSseServer', () => {
       appId: 'test-app-id',
       appSecret: 'test-app-secret',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     // 创建McpServer模拟实例
@@ -129,7 +129,7 @@ describe('initSseServer', () => {
     expect(express).toHaveBeenCalled();
     expect(mockApp.get).toHaveBeenCalledWith('/sse', expect.any(Function));
     expect(mockApp.post).toHaveBeenCalledWith('/messages', expect.any(Function));
-    expect(mockApp.listen).toHaveBeenCalledWith(options.port, options.host, expect.any(Function));
+    expect(mockApp.listen).toHaveBeenCalledWith(parseInt(options.port!), options.host, expect.any(Function));
   });
 
   it('应该设置SSE响应头和连接MCP服务器', async () => {
@@ -137,7 +137,7 @@ describe('initSseServer', () => {
       appId: 'test-app-id',
       appSecret: 'test-app-secret',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     // 创建McpServer模拟实例
@@ -166,7 +166,7 @@ describe('initSseServer', () => {
       appId: 'test-app-id',
       appSecret: 'test-app-secret',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     // 创建McpServer模拟实例
@@ -201,7 +201,7 @@ describe('initSseServer', () => {
       appId: 'test-app-id',
       appSecret: 'test-app-secret',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     // 创建McpServer模拟实例
@@ -232,7 +232,7 @@ describe('initSseServer', () => {
       appId: 'test-app-id',
       appSecret: 'test-app-secret',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     // 修改listen以模拟错误
@@ -257,7 +257,7 @@ describe('initSseServer', () => {
       appId: 'test-app-id',
       appSecret: 'test-app-secret',
       host: 'localhost',
-      port: 3000,
+      port: '3000',
     };
 
     // 创建McpServer模拟实例

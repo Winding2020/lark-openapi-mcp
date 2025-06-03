@@ -14,6 +14,7 @@ module.exports = {
   coverageReporters: ['text', 'lcov'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^open$': '<rootDir>/tests/__mocks__/open.js',
   },
   moduleFileExtensions: ['ts', 'js', 'json'],
   transform: {
