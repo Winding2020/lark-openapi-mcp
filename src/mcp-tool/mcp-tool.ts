@@ -70,21 +70,16 @@ export class LarkMcpTool {
         domain: this.domain,
         scopes: [
           'contact:user.email:readonly',  // 用户邮箱（基础权限）
-          'docs:doc',
-          'docs:doc:readonly',
-          'docs:document:export',
-          'docs:document.media:download',
-          'drive:drive',
-          'drive:drive:readonly',
-          'drive:drive.search:readonly',
-          'drive:export:readonly',
-          'drive:file',
-          'drive:file:download',
-          'drive:file:readonly',
-          'sheets:spreadsheet:read',
-          'sheets:spreadsheet:write_only',
-          'space:document:retrieve'
-        ], // 扩展权限范围以支持更多功能
+          "docx:document",
+          "docx:document:create",
+          "wiki:node:copy",
+          "wiki:node:create",
+          "wiki:node:move",
+          "wiki:node:read",
+          "wiki:node:retrieve",
+          "wiki:node:update",
+          "wiki:wiki"
+        ],
         redirectPort: options.oauthRedirectPort || 3000,
       });
     }
