@@ -86,6 +86,7 @@ export const presetDocToolNames: ToolName[] = [
   'docx.v1.document.rawContent',
   'docx.builtin.import',
   'docx.builtin.search',
+  'docx.v1.documentBlockChildren.createSimplified',
   'drive.v1.permissionMember.create',
   'wiki.v2.space.getNode',
   'wiki.v1.node.search',

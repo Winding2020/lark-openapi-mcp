@@ -1,6 +1,6 @@
 {
-  "name": "@larksuiteoapi/lark-mcp",
-  "version": "0.3.1",
+  "name": "lark-mcp-tool",
+  "version": "0.3.2",
   "description": "Feishu/Lark OpenAPI MCP",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -35,7 +35,7 @@
     "open-api",
     "ai"
   ],
-  "homepage": "https://github.com/larksuite/lark-openapi-mcp",
+  "homepage": "https://github.com/winding00/lark-openapi-mcp",
   "engines": {
     "node": ">=16.20.0"
   },
