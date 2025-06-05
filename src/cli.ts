@@ -32,6 +32,7 @@ program
   .option('-p, --port <port>', 'Port to listen in sse mode (default: "3000")')
   .option('--config <configPath>', 'Config file path (JSON)')
   .option('--oauth-port <oauthPort>', 'OAuth callback server port (default: "3000")')
+  .option('--scopes <scopes>', 'OAuth permission scopes, separated by commas (e.g. "docx:document,wiki:node:read")')
   .action(async (options) => {
     let fileOptions = {};
     if (options.config) {
@@ -44,6 +45,11 @@ program
       }
     }
     const mergedOptions = { ...OAPI_MCP_DEFAULT_ARGS, ...OAPI_MCP_ENV_ARGS, ...fileOptions, ...options };
+    
+    // 处理scopes参数
+    if (mergedOptions.scopes && typeof mergedOptions.scopes === 'string') {
+      mergedOptions.scopes = mergedOptions.scopes.split(',').map((scope: string) => scope.trim());
+    }
     
     // 如果配置了OAuth端口，传递给OAuth helper
     if (mergedOptions.oauthPort) {

@@ -208,6 +208,7 @@ The `lark-mcp mcp` tool provides various command line parameters for flexible MC
 | `--mode` | `-m` | Transport mode, options are stdio or sse, default is stdio | `-m sse` |
 | `--host` |  | Listening host in SSE mode, default is localhost | `--host 0.0.0.0` |
 | `--port` | `-p` | Listening port in SSE mode, default is 3000 | `-p 3000` |
+| `--scopes` |  | OAuth permission scopes, separated by commas | `--scopes "docx:document,wiki:node:read"` |
 | `--config` |  | Configuration file path, supports JSON format | `--config ./config.json` |
 | `--version` | `-V` | Display version number | `-V` |
 | `--help` | `-h` | Display help information | `-h` |
@@ -280,7 +281,18 @@ The `lark-mcp mcp` tool provides various command line parameters for flexible MC
    > - kebab format: `im-v1-message-create`
    > - dot format: `im.v1.message.create`
 
-9. **Using Environment Variables Instead of Command Line Parameters**:
+9. **Customizing OAuth Permission Scopes**:
+   ```bash
+   # Request only document-related permissions
+   lark-mcp mcp -a cli_xxxx -s yyyyy --scopes "contact:user.email:readonly,docx:document,docx:document:create,wiki:node:read"
+   
+   # Request only instant messaging permissions
+   lark-mcp mcp -a cli_xxxx -s yyyyy --scopes "contact:user.email:readonly,im:message,im:chat"
+   ```
+   
+   > **Note**: By customizing permission scopes, you can reduce the number of permissions users need to approve during OAuth authorization, improving user experience. If this parameter is not set, the default comprehensive permission set will be used.
+
+10. **Using Environment Variables Instead of Command Line Parameters**:
    ```bash
    # Set environment variables
    export APP_ID=cli_xxxx
@@ -290,7 +302,7 @@ The `lark-mcp mcp` tool provides various command line parameters for flexible MC
    lark-mcp mcp
    ```
 
-10. **Using Configuration File**:
+11. **Using Configuration File**:
 
     Besides command line parameters, you can also use a JSON format configuration file to set parameters:
 
@@ -312,13 +324,22 @@ The `lark-mcp mcp` tool provides various command line parameters for flexible MC
       "tokenMode": "auto",
       "mode": "stdio",
       "host": "localhost",
-      "port": "3000"
+      "port": "3000",
+      "scopes": [
+        "contact:user.email:readonly",
+        "docx:document",
+        "docx:document:create",
+        "wiki:node:read",
+        "wiki:node:create"
+      ]
     }
     ```
 
-    > **Note**: Command line parameters have higher priority than configuration file. When using both command line parameters and configuration file, command line parameters will override corresponding settings in the configuration file.
+    > **Note**: 
+    > - Command line parameters have higher priority than configuration file. When using both command line parameters and configuration file, command line parameters will override corresponding settings in the configuration file.
+    > - The `scopes` configuration specifies the permission scopes required for OAuth authorization. If not set, the default comprehensive permission set will be used. You can adjust the permission scope based on the APIs you actually use to reduce authorization requests.
 
-11. **Transport Modes**:
+12. **Transport Modes**:
 
     lark-mcp supports two transport modes:
 
@@ -376,4 +397,4 @@ The `lark-mcp mcp` tool provides various command line parameters for flexible MC
 
 ## Feedback
 
-Issues are welcome to help improve this tool. If you have any questions or suggestions, please raise them in the GitHub repository. 
+Issues are welcome to help improve this tool. If you have any questions or suggestions, please raise them in the GitHub repository.

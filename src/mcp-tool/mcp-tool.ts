@@ -33,6 +33,23 @@ export class LarkMcpTool {
   private appSecret?: string;
   private domain: string = 'https://open.feishu.cn';
 
+  // 默认OAuth权限范围
+  private static readonly DEFAULT_SCOPES = [
+    'contact:user.email:readonly',
+    'drive:drive',
+    'drive:file',
+    'drive:file:upload',
+    'docx:document',
+    'docx:document:create',
+    'wiki:node:copy',
+    'wiki:node:create',
+    'wiki:node:move',
+    'wiki:node:read',
+    'wiki:node:retrieve',
+    'wiki:node:update',
+    'wiki:wiki'
+  ];
+
   /**
    * Feishu/Lark MCP
    * @param options Feishu/Lark Client Options
@@ -68,18 +85,7 @@ export class LarkMcpTool {
         appId: this.appId,
         appSecret: this.appSecret,
         domain: this.domain,
-        scopes: [
-          'contact:user.email:readonly',  // 用户邮箱（基础权限）
-          "docx:document",
-          "docx:document:create",
-          "wiki:node:copy",
-          "wiki:node:create",
-          "wiki:node:move",
-          "wiki:node:read",
-          "wiki:node:retrieve",
-          "wiki:node:update",
-          "wiki:wiki"
-        ],
+        scopes: options.scopes || LarkMcpTool.DEFAULT_SCOPES,
         redirectPort: options.oauthRedirectPort || 3000,
       });
     }
@@ -138,6 +144,14 @@ export class LarkMcpTool {
    */
   getTools(): McpTool[] {
     return this.allTools;
+  }
+
+  /**
+   * 获取默认的OAuth权限范围
+   * @returns 默认权限范围数组
+   */
+  static getDefaultScopes(): string[] {
+    return [...LarkMcpTool.DEFAULT_SCOPES];
   }
 
   /**

@@ -73,4 +73,6 @@ export interface LarkMcpToolOptions extends LarkClientOptions {
   tokenMode?: TokenMode;
   // OAuth配置
   oauthRedirectPort?: number;
+  // OAuth权限范围
+  scopes?: string[];
 }

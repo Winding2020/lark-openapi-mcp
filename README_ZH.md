@@ -211,6 +211,7 @@ lark-mcp mcp -a <your_app_id> -s <your_app_secret> -t im.v1.message.create,im.v1
 | `--host` |  | SSE模式下的监听主机，默认为localhost | `--host 0.0.0.0` |
 | `--port` | `-p` | SSE模式下的监听端口，默认为3000 | `-p 3000` |
 | `--oauth-port` |  | OAuth回调服务器端口，默认为3000 | `--oauth-port 8080` |
+| `--scopes` |  | OAuth权限范围，用逗号分隔 | `--scopes "docx:document,wiki:node:read"` |
 | `--config` |  | 配置文件路径，支持JSON格式 | `--config ./config.json` |
 | `--version` | `-V` | 显示版本号 | `-V` |
 | `--help` | `-h` | 显示帮助信息 | `-h` |
@@ -299,7 +300,18 @@ lark-mcp mcp -a <your_app_id> -s <your_app_secret> -t im.v1.message.create,im.v1
    > - kebab格式: `im-v1-message-create`
    > - dot格式: `im.v1.message.create`
 
-9. **使用环境变量代替命令行参数**：
+9. **自定义OAuth权限范围**：
+   ```bash
+   # 仅申请文档相关权限
+   lark-mcp mcp -a cli_xxxx -s yyyyy --scopes "contact:user.email:readonly,docx:document,docx:document:create,wiki:node:read"
+   
+   # 仅申请即时消息权限
+   lark-mcp mcp -a cli_xxxx -s yyyyy --scopes "contact:user.email:readonly,im:message,im:chat"
+   ```
+   
+   > **说明**：通过自定义权限范围，可以减少用户在OAuth授权时需要同意的权限数量，提升用户体验。如果不设置此参数，将使用默认的完整权限集合。
+
+10. **使用环境变量代替命令行参数**：
    ```bash
    # 设置环境变量
    export APP_ID=cli_xxxx
@@ -309,7 +321,7 @@ lark-mcp mcp -a <your_app_id> -s <your_app_secret> -t im.v1.message.create,im.v1
    lark-mcp mcp
    ```
 
-10. **使用配置文件**：
+11. **使用配置文件**：
 
     除了命令行参数外，您还可以使用JSON格式的配置文件来设置参数：
 
@@ -331,11 +343,20 @@ lark-mcp mcp -a <your_app_id> -s <your_app_secret> -t im.v1.message.create,im.v1
       "tokenMode": "auto",
       "mode": "stdio",
       "host": "localhost",
-      "port": "3000"
+      "port": "3000",
+      "scopes": [
+        "contact:user.email:readonly",
+        "docx:document",
+        "docx:document:create",
+        "wiki:node:read",
+        "wiki:node:create"
+      ]
     }
     ```
 
-    > **说明**：命令行参数优先级高于配置文件。当同时使用命令行参数和配置文件时，命令行参数会覆盖配置文件中的对应设置。
+    > **说明**：
+    > - 命令行参数优先级高于配置文件。当同时使用命令行参数和配置文件时，命令行参数会覆盖配置文件中的对应设置。
+    > - `scopes`配置项用于指定OAuth授权时需要的权限范围，如果不设置将使用默认的完整权限集合。您可以根据实际使用的API调整权限范围，减少授权时的权限申请。
 
 #### OAuth授权管理
 

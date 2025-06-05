@@ -88,61 +88,272 @@ export const larkDocxSimplifiedCreateTool: McpTool = {
     try {
       const { userAccessToken } = options || {};
       
+      // 参数验证
+      if (!params.data.children || !Array.isArray(params.data.children) || params.data.children.length === 0) {
+        throw new Error('Invalid parameters: children array is required and cannot be empty');
+      }
+      
       // 转换简化的参数为完整的API参数
       const transformedData = {
-        children: params.data.children?.map((child: any) => {
+        children: params.data.children?.map((child: any, index: number) => {
           const blockData: any = {
             block_type: child.block_type,
           };
           
-          // 处理文本块
-          if (child.text) {
-            blockData.text = {
-              style: {
-                align: child.text.style?.align || 1, // 默认左对齐
-                done: child.text.style?.done,
-                language: child.text.style?.language,
-                folded: false,
-              },
-              elements: [
-                {
-                  text_run: {
-                    content: child.text.content || '',
-                    text_element_style: {
-                      bold: child.text.style?.bold || false,
-                      italic: child.text.style?.italic || false,
-                      strikethrough: child.text.style?.strikethrough || false,
-                      underline: child.text.style?.underline || false,
-                      inline_code: false,
-                      text_color: child.text.style?.text_color,
-                      background_color: child.text.style?.background_color,
+          // 根据块类型使用正确的字段结构
+          switch (child.block_type) {
+            case 2: // 文本块
+              blockData.text = {
+                style: {
+                  align: child.text?.style?.align || 1,
+                  folded: false,
+                },
+                elements: [
+                  {
+                    text_run: {
+                      content: child.text?.content || '',
+                      text_element_style: {
+                        bold: child.text?.style?.bold || false,
+                        italic: child.text?.style?.italic || false,
+                        strikethrough: child.text?.style?.strikethrough || false,
+                        underline: child.text?.style?.underline || false,
+                        inline_code: false,
+                        text_color: child.text?.style?.text_color,
+                        background_color: child.text?.style?.background_color,
+                      },
                     },
                   },
+                ],
+              };
+              break;
+              
+            case 3: // 标题1
+              blockData.text = {
+                style: {
+                  align: child.text?.style?.align || 1,
+                  folded: false,
                 },
-              ],
-            };
-          } else if (child.block_type === 2) {
-            // 空文本块
-            blockData.text = {
-              style: {
-                align: 1,
-                folded: false,
-              },
-              elements: [
-                {
-                  text_run: {
-                    content: '',
-                    text_element_style: {
-                      bold: false,
-                      italic: false,
-                      strikethrough: false,
-                      underline: false,
-                      inline_code: false,
+                elements: [
+                  {
+                    text_run: {
+                      content: child.text?.content || '',
+                      text_element_style: {
+                        bold: child.text?.style?.bold || false,
+                        italic: child.text?.style?.italic || false,
+                        strikethrough: child.text?.style?.strikethrough || false,
+                        underline: child.text?.style?.underline || false,
+                        inline_code: false,
+                        text_color: child.text?.style?.text_color,
+                        background_color: child.text?.style?.background_color,
+                      },
                     },
                   },
+                ],
+              };
+              break;
+              
+            case 4: // 标题2
+              blockData.text = {
+                style: {
+                  align: child.text?.style?.align || 1,
+                  folded: false,
                 },
-              ],
-            };
+                elements: [
+                  {
+                    text_run: {
+                      content: child.text?.content || '',
+                      text_element_style: {
+                        bold: child.text?.style?.bold || false,
+                        italic: child.text?.style?.italic || false,
+                        strikethrough: child.text?.style?.strikethrough || false,
+                        underline: child.text?.style?.underline || false,
+                        inline_code: false,
+                        text_color: child.text?.style?.text_color,
+                        background_color: child.text?.style?.background_color,
+                      },
+                    },
+                  },
+                ],
+              };
+              break;
+              
+            case 5: // 标题3
+              blockData.text = {
+                style: {
+                  align: child.text?.style?.align || 1,
+                  folded: false,
+                },
+                elements: [
+                  {
+                    text_run: {
+                      content: child.text?.content || '',
+                      text_element_style: {
+                        bold: child.text?.style?.bold || false,
+                        italic: child.text?.style?.italic || false,
+                        strikethrough: child.text?.style?.strikethrough || false,
+                        underline: child.text?.style?.underline || false,
+                        inline_code: false,
+                        text_color: child.text?.style?.text_color,
+                        background_color: child.text?.style?.background_color,
+                      },
+                    },
+                  },
+                ],
+              };
+              break;
+              
+            case 12: // 无序列表
+              blockData.text = {
+                style: {
+                  align: child.text?.style?.align || 1,
+                  folded: false,
+                },
+                elements: [
+                  {
+                    text_run: {
+                      content: child.text?.content || '',
+                      text_element_style: {
+                        bold: child.text?.style?.bold || false,
+                        italic: child.text?.style?.italic || false,
+                        strikethrough: child.text?.style?.strikethrough || false,
+                        underline: child.text?.style?.underline || false,
+                        inline_code: false,
+                        text_color: child.text?.style?.text_color,
+                        background_color: child.text?.style?.background_color,
+                      },
+                    },
+                  },
+                ],
+              };
+              break;
+              
+            case 13: // 有序列表
+              blockData.text = {
+                style: {
+                  align: child.text?.style?.align || 1,
+                  folded: false,
+                },
+                elements: [
+                  {
+                    text_run: {
+                      content: child.text?.content || '',
+                      text_element_style: {
+                        bold: child.text?.style?.bold || false,
+                        italic: child.text?.style?.italic || false,
+                        strikethrough: child.text?.style?.strikethrough || false,
+                        underline: child.text?.style?.underline || false,
+                        inline_code: false,
+                        text_color: child.text?.style?.text_color,
+                        background_color: child.text?.style?.background_color,
+                      },
+                    },
+                  },
+                ],
+              };
+              break;
+              
+            case 14: // 代码块
+              blockData.code = {
+                style: {
+                  language: child.text?.style?.language || 1, // 默认PlainText
+                  wrap: false,
+                },
+                elements: [
+                  {
+                    text_run: {
+                      content: child.text?.content || '',
+                      text_element_style: {
+                        bold: false,
+                        italic: false,
+                        strikethrough: false,
+                        underline: false,
+                        inline_code: false,
+                      },
+                    },
+                  },
+                ],
+              };
+              break;
+              
+            case 15: // 引用块
+              blockData.quote = {
+                style: {
+                  align: child.text?.style?.align || 1,
+                  folded: false,
+                },
+                elements: [
+                  {
+                    text_run: {
+                      content: child.text?.content || '',
+                      text_element_style: {
+                        bold: child.text?.style?.bold || false,
+                        italic: child.text?.style?.italic || false,
+                        strikethrough: child.text?.style?.strikethrough || false,
+                        underline: child.text?.style?.underline || false,
+                        inline_code: false,
+                        text_color: child.text?.style?.text_color,
+                        background_color: child.text?.style?.background_color,
+                      },
+                    },
+                  },
+                ],
+              };
+              break;
+              
+            case 17: // 待办事项
+              blockData.todo = {
+                style: {
+                  align: child.text?.style?.align || 1,
+                  done: child.text?.style?.done || false,
+                  folded: false,
+                },
+                elements: [
+                  {
+                    text_run: {
+                      content: child.text?.content || '',
+                      text_element_style: {
+                        bold: child.text?.style?.bold || false,
+                        italic: child.text?.style?.italic || false,
+                        strikethrough: child.text?.style?.strikethrough || false,
+                        underline: child.text?.style?.underline || false,
+                        inline_code: false,
+                        text_color: child.text?.style?.text_color,
+                        background_color: child.text?.style?.background_color,
+                      },
+                    },
+                  },
+                ],
+              };
+              break;
+              
+            case 22: // 分割线
+              blockData.divider = {};
+              break;
+              
+            default:
+              // 默认作为文本块处理
+              blockData.text = {
+                style: {
+                  align: child.text?.style?.align || 1,
+                  folded: false,
+                },
+                elements: [
+                  {
+                    text_run: {
+                      content: child.text?.content || '',
+                      text_element_style: {
+                        bold: child.text?.style?.bold || false,
+                        italic: child.text?.style?.italic || false,
+                        strikethrough: child.text?.style?.strikethrough || false,
+                        underline: child.text?.style?.underline || false,
+                        inline_code: false,
+                        text_color: child.text?.style?.text_color,
+                        background_color: child.text?.style?.background_color,
+                      },
+                    },
+                  },
+                ],
+              };
           }
           
           return blockData;
@@ -163,6 +374,7 @@ export const larkDocxSimplifiedCreateTool: McpTool = {
 
       // 🔧 修复：正确处理token，采用与标准处理器相同的逻辑
       let response;
+      
       if (params.useUAT) {
         // 如果需要使用用户访问令牌但没有token，抛出错误
         if (!userAccessToken) {
@@ -188,12 +400,22 @@ export const larkDocxSimplifiedCreateTool: McpTool = {
       };
     } catch (error) {
       const errorData = (error as any)?.response?.data || error;
+      
+      // 提供更详细的错误信息
+      let errorMessage = 'Document block creation failed';
+      if (errorData?.code) {
+        errorMessage += ` (Code: ${errorData.code})`;
+      }
+      if (errorData?.msg) {
+        errorMessage += ` - ${errorData.msg}`;
+      }
+      
       return {
         isError: true,
         content: [
           {
             type: 'text' as const,
-            text: `Document block creation failed: ${JSON.stringify(errorData)}`,
+            text: `${errorMessage}: ${JSON.stringify(errorData)}`,
           },
         ],
       };
